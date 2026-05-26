@@ -43,10 +43,7 @@ RUN cd /ComfyUI/custom_nodes && \
     cd ComfyUI-AdaptiveWindowSize/ComfyUI-AdaptiveWindowSize && \
     mv * ../
 
-#RUN pip install --upgrade onnxruntime-gpu==1.22
-
-RUN mkdir -p /ComfyUI/models/detection && \
-    ln -s /ComfyUI/models/detection /ComfyUI/models/onnx
+RUN pip install --upgrade onnxruntime-gpu==1.22
 
 RUN wget -q https://huggingface.co/Kijai/WanVideo_comfy/resolve/main/Wan2_1_VAE_bf16.safetensors -O /ComfyUI/models/vae/Wan2_1_VAE_bf16.safetensors
 RUN wget -q https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/clip_vision/clip_vision_h.safetensors -O /ComfyUI/models/clip_vision/clip_vision_h.safetensors
@@ -58,11 +55,11 @@ RUN wget -q https://huggingface.co/eddy1111111/lightx2v_it2v_adaptive_fusionv_1.
 RUN wget -q https://huggingface.co/eddy1111111/lightx2v_it2v_adaptive_fusionv_1.safetensors/resolve/main/FullDynamic_Ultimate_Fusion_Elite.safetensors -O /ComfyUI/models/loras/FullDynamic_Ultimate_Fusion_Elite.safetensors
 RUN wget -q https://huggingface.co/eddy1111111/lightx2v_it2v_adaptive_fusionv_1.safetensors/resolve/main/Wan2.2-Fun-A14B-InP-Fusion-Elite.safetensors -O /ComfyUI/models/loras/Wan2.2-Fun-A14B-InP-Fusion-Elite.safetensors 
 RUN wget -q https://huggingface.co/datasets/hijdese2020/wan22_datalora/resolve/main/allnsfw/wan22-k3nk4llinon3-15epoc-full-low-k3nk.safetensors -O /ComfyUI/models/loras/wan22-k3nk4llinon3-15epoc-full-low-k3nk.safetensors
-#RUN mkdir -p /ComfyUI/models/detection
+RUN mkdir -p /ComfyUI/models/detection
 
-RUN wget -q https://huggingface.co/Wan-AI/Wan2.2-Animate-14B/resolve/main/process_checkpoint/det/yolov10m.onnx -O /ComfyUI/models/detection/yolov10m.onnx
-RUN wget -q https://huggingface.co/Kijai/vitpose_comfy/resolve/main/onnx/vitpose_h_wholebody_model.onnx -O /ComfyUI/models/detection/vitpose_h_wholebody_model.onnx
-RUN wget -q https://huggingface.co/Kijai/vitpose_comfy/resolve/main/onnx/vitpose_h_wholebody_data.bin -O /ComfyUI/models/detection/vitpose_h_wholebody_data.bin
+RUN wget  https://huggingface.co/Wan-AI/Wan2.2-Animate-14B/resolve/main/process_checkpoint/det/yolov10m.onnx -O /ComfyUI/models/detection/yolov10m.onnx
+RUN wget  https://huggingface.co/Kijai/vitpose_comfy/resolve/main/onnx/vitpose_h_wholebody_model.onnx -O /ComfyUI/models/detection/vitpose_h_wholebody_model.onnx
+RUN wget  https://huggingface.co/Kijai/vitpose_comfy/resolve/main/onnx/vitpose_h_wholebody_data.bin -O /ComfyUI/models/detection/vitpose_h_wholebody_data.bin
 
 
 COPY . .
