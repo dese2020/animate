@@ -1,34 +1,35 @@
 # Use specific version of nvidia cuda image
-FROM wlsdml1114/multitalk-base:1.7 as runtime
+FROM dese251/sviwan22:run as runtime
 
-RUN pip install -U "huggingface_hub[hf_transfer]"
+#RUN pip install -U "huggingface_hub[hf_transfer]"
+RUN pip install huggingface_hub
 RUN pip install runpod websocket-client
 
 WORKDIR /
 
-RUN git clone https://github.com/comfyanonymous/ComfyUI.git && \
-    cd /ComfyUI && \
-    pip install -r requirements.txt
+#RUN git clone https://github.com/comfyanonymous/ComfyUI.git && \
+#    cd /ComfyUI && \
+#    pip install -r requirements.txt
 
-RUN cd /ComfyUI/custom_nodes && \
-    git clone https://github.com/Comfy-Org/ComfyUI-Manager.git && \
-    cd ComfyUI-Manager && \
-    pip install -r requirements.txt
+#RUN cd /ComfyUI/custom_nodes && \
+#    git clone https://github.com/Comfy-Org/ComfyUI-Manager.git && \
+#    cd ComfyUI-Manager && \
+#    pip install -r requirements.txt
 
 RUN cd /ComfyUI/custom_nodes && \
     git clone https://github.com/kijai/ComfyUI-WanVideoWrapper && \
     cd ComfyUI-WanVideoWrapper && \
     pip install -r requirements.txt
 
-RUN cd /ComfyUI/custom_nodes && \
-    git clone https://github.com/kijai/ComfyUI-KJNodes && \
-    cd ComfyUI-KJNodes && \
-    pip install -r requirements.txt
+#RUN cd /ComfyUI/custom_nodes && \
+#    git clone https://github.com/kijai/ComfyUI-KJNodes && \
+#    cd ComfyUI-KJNodes && \
+#    pip install -r requirements.txt
 
-RUN cd /ComfyUI/custom_nodes && \
-    git clone https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite && \
-    cd ComfyUI-VideoHelperSuite && \
-    pip install -r requirements.txt
+#RUN cd /ComfyUI/custom_nodes && \
+#    git clone https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite && \
+#    cd ComfyUI-VideoHelperSuite && \
+#    pip install -r requirements.txt
 
 RUN cd /ComfyUI/custom_nodes && \
     git clone https://github.com/kijai/ComfyUI-WanAnimatePreprocess && \
@@ -43,12 +44,14 @@ RUN cd /ComfyUI/custom_nodes && \
     cd ComfyUI-AdaptiveWindowSize/ComfyUI-AdaptiveWindowSize && \
     mv * ../
 
-RUN pip install --upgrade onnxruntime-gpu==1.22
+#RUN pip install --upgrade onnxruntime-gpu==1.22
 
 RUN wget -q https://huggingface.co/Kijai/WanVideo_comfy/resolve/main/Wan2_1_VAE_bf16.safetensors -O /ComfyUI/models/vae/Wan2_1_VAE_bf16.safetensors
 RUN wget -q https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/clip_vision/clip_vision_h.safetensors -O /ComfyUI/models/clip_vision/clip_vision_h.safetensors
-RUN wget -q https://huggingface.co/Kijai/WanVideo_comfy/resolve/main/umt5-xxl-enc-bf16.safetensors -O /ComfyUI/models/text_encoders/umt5-xxl-enc-bf16.safetensors
-RUN wget -q https://huggingface.co/Kijai/WanVideo_comfy_fp8_scaled/resolve/main/Wan22Animate/Wan2_2-Animate-14B_fp8_e4m3fn_scaled_KJ.safetensors -O /ComfyUI/models/diffusion_models/Wan2_2-Animate-14B_fp8_e4m3fn_scaled_KJ.safetensors
+#RUN wget -q https://huggingface.co/Kijai/WanVideo_comfy/resolve/main/umt5-xxl-enc-bf16.safetensors -O /ComfyUI/models/text_encoders/umt5-xxl-enc-bf16.safetensors
+#RUN wget -q https://huggingface.co/Kijai/WanVideo_comfy_fp8_scaled/resolve/main/Wan22Animate/Wan2_2-Animate-14B_fp8_e4m3fn_scaled_KJ.safetensors -O /ComfyUI/models/diffusion_models/Wan2_2-Animate-14B_fp8_e4m3fn_scaled_KJ.safetensors
+RUN python3 -c "from huggingface_hub import hf_hub_download; hf_hub_download(repo_id='Kijai/WanVideo_comfy', filename='umt5-xxl-enc-bf16.safetensors', local_dir='/ComfyUI/models/text_encoders/', local_dir_use_symlinks=False)"
+RUN python3 -c "from huggingface_hub import hf_hub_download; hf_hub_download(repo_id='Kijai/WanVideo_comfy_fp8_scaled', filename='Wan2_2-Animate-14B_fp8_e4m3fn_scaled_KJ.safetensors', local_dir='/ComfyUI/models/diffusion_models/', local_dir_use_symlinks=False)"
 
 RUN wget -q https://huggingface.co/eddy1111111/lightx2v_it2v_adaptive_fusionv_1.safetensors/resolve/main/lightx2v_elite_it2v_animate_face.safetensors -O /ComfyUI/models/loras/lightx2v_elite_it2v_animate_face.safetensors
 RUN wget -q https://huggingface.co/eddy1111111/lightx2v_it2v_adaptive_fusionv_1.safetensors/resolve/main/WAN22_MoCap_fullbodyCOPY_ED.safetensors -O /ComfyUI/models/loras/WAN22_MoCap_fullbodyCOPY_ED.safetensors
