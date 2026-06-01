@@ -1,7 +1,7 @@
 {
   "22": {
     "inputs": {
-      "model": "Wan2_2-Animate-14B_fp8_e4m3fn_scaled_KJ.safetensors",
+      "model": "wan2.2_animate_14B_bf16.safetensors",
       "base_precision": "fp16_fast",
       "quantization": "disabled",
       "load_device": "offload_device",
@@ -274,7 +274,7 @@
   },
   "150": {
     "inputs": {
-      "value": 1280
+      "value": 512
     },
     "class_type": "INTConstant",
     "_meta": {
@@ -283,7 +283,7 @@
   },
   "151": {
     "inputs": {
-      "value": 720
+      "value": 704
     },
     "class_type": "INTConstant",
     "_meta": {
@@ -335,8 +335,8 @@
       "strength_2": 0.6,
       "lora_3": "Wan2.2-Fun-A14B-InP-Fusion-Elite.safetensors",
       "strength_3": 0.5,
-      "lora_4": "none",
-      "strength_4": 1,
+      "lora_4": "wan22-k3nk4llinon3-15epoc-full-low-k3nk.safetensors",
+      "strength_4": 0.5,
       "low_mem_load": false,
       "merge_loras": false
     },
@@ -431,7 +431,7 @@
   },
   "205": {
     "inputs": {
-      "expand": 10,
+      "expand": 15,
       "incremental_expandrate": 0,
       "tapered_corners": true,
       "flip_input": false,
