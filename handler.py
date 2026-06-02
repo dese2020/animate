@@ -103,6 +103,56 @@ def load_workflow(workflow_path):
     with open(workflow_path, 'r') as file:
         return json.load(file)
 
+def apply_lora_strengths(prompt, job_input):
+    """
+    Permite modificar strengths usando el nombre de la LoRA.
+
+    Ejemplo:
+
+    "loras": {
+        "lightx2v_elite_it2v_animate_face": 0.3,
+        "WAN22_MoCap_fullbodyCOPY_ED": 1.0,
+        "FullDynamic_Ultimate_Fusion_Elite": 0.8
+    }
+    """
+
+    loras_cfg = job_input.get("loras")
+
+    if not loras_cfg:
+        return
+
+    lora_node_id = "197"
+
+    if lora_node_id not in prompt:
+        logger.warning("Nodo 197 (WanVideoLoraSelectMulti) no encontrado")
+        return
+
+    lora_inputs = prompt[lora_node_id]["inputs"]
+
+    logger.info(f"Aplicando configuración de LoRAs: {loras_cfg}")
+
+    for i in range(20):
+        lora_key = f"lora_{i}"
+        strength_key = f"strength_{i}"
+
+        if lora_key not in lora_inputs:
+            continue
+
+        lora_name = str(lora_inputs[lora_key])
+
+        for search_name, strength in loras_cfg.items():
+            if search_name.lower() in lora_name.lower():
+
+                old_strength = lora_inputs.get(strength_key)
+
+                lora_inputs[strength_key] = float(strength)
+
+                logger.info(
+                    f"LoRA '{lora_name}' "
+                    f"strength {old_strength} -> {strength}"
+                )
+
+                break
 
 def process_input(input_data, temp_dir, output_filename, input_type):
     """입력 데이터를 처리하여 파일 경로를 반환하는 함수"""
@@ -223,6 +273,22 @@ def handler(job):
         prompt["196"]["inputs"]["blocks_to_swap"] = job_input.get("blocks_to_swap",8)
         prompt["22"]["inputs"]["attention_mode"] = job_input.get("attention_mode", "flash_attn")
         prompt["63"]["inputs"]["frame_load_cap"] = job_input["fps"] * job_input["max_seconds"]
+        
+        frame_window_size = job_input.get("frame_window_size", 77)
+        adaptive_window_mode = job_input.get("adaptive_window_mode", "adaptive")
+        
+        prompt["198"]["inputs"]["frame_window_size"] = frame_window_size
+        prompt["198"]["inputs"]["adaptive_window_mode"] = adaptive_window_mode
+        
+        # Animate embeds
+        if "198" in prompt:
+            prompt["198"]["inputs"]["pose_strength"] = job_input.get("pose_strength", 1.0)
+            prompt["198"]["inputs"]["face_strength"] = job_input.get("face_strength", 1.0)
+
+        # LoRAs
+        apply_lora_strengths(prompt, job_input)
+        
+        
     else:
         if job_input.get("mode", "replace") == "animate":
             prompt = load_workflow('/newWanAnimate_point_animate_api.json')
