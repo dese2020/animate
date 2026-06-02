@@ -1,15 +1,15 @@
 {
   "22": {
     "inputs": {
-      "model": "wan2.2_animate_14B_bf16.safetensors",
-      "base_precision": "fp16_fast",
+      "model": "Wan2_2-Animate-14B_fp8_e4m3fn_scaled_KJ.safetensors",
+      "base_precision": "bf16",
       "quantization": "disabled",
       "load_device": "offload_device",
-      "attention_mode": "sageattn",
+      "attention_mode": "flash_attn_3",
       "rms_norm_function": "default",
       "compile_args": [
         "35",
-        0
+        1
       ]
     },
     "class_type": "WanVideoModelLoader",
@@ -102,7 +102,7 @@
     "inputs": {
       "backend": "inductor",
       "fullgraph": false,
-      "mode": "default",
+      "mode": "max-autotune",
       "dynamic": false,
       "dynamo_cache_size_limit": 64,
       "compile_transformer_blocks_only": true,
@@ -231,7 +231,7 @@
       "precision": "bf16",
       "positive_prompt": "man is walking, style is soft 3D render style, night time, moonlight",
       "negative_prompt": "色调艳丽，过曝，静态，细节模糊不清，字幕，风格，作品，画作，画面，静止，整体发灰，最差质量，低质量，JPEG压缩残留，丑陋的，残缺的，多余的手指，画得不好的手部，画得不好的脸部，畸形的，毁容的，形态畸形的肢体，手指融合，静止不动的画面，杂乱的背景，三条腿，背景人很多，倒着走",
-      "quantization": "disabled",
+      "quantization": "fp8_e4m3fn",
       "use_disk_cache": false,
       "device": "gpu"
     },
@@ -308,12 +308,12 @@
   },
   "196": {
     "inputs": {
-      "blocks_to_swap": 25,
+      "blocks_to_swap": 8,
       "enable_cuda_optimization": true,
       "enable_dram_optimization": true,
       "auto_hardware_tuning": false,
-      "vram_threshold_percent": 50,
-      "num_cuda_streams": 6,
+      "vram_threshold_percent": 75,
+      "num_cuda_streams": 8,
       "bandwidth_target": 0.8,
       "offload_txt_emb": false,
       "offload_img_emb": false,
