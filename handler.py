@@ -220,6 +220,9 @@ def handler(job):
         prompt["27"]["inputs"]["steps"] = job_input.get("steps", 4)
         prompt["150"]["inputs"]["value"] = job_input["width"]
         prompt["151"]["inputs"]["value"] = job_input["height"]
+        prompt["196"]["inputs"]["blocks_to_swap"] = job_input.get("blocks_to_swap",8)
+        prompt["22"]["inputs"]["attention_mode"] = job_input.get("attention_mode", "flash_attn")
+        prompt["63"]["inputs"]["frame_load_cap"] = job_input["fps"] * job_input["max_seconds"]
     else:
         if job_input.get("mode", "replace") == "animate":
             prompt = load_workflow('/newWanAnimate_point_animate_api.json')
