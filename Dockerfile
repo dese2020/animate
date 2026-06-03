@@ -5,6 +5,10 @@ FROM dese251/sviwan22:run AS runtime
 RUN pip install huggingface_hub
 RUN pip install runpod websocket-client
 
+ARG HF_TOKEN
+
+RUN python3 -c "from huggingface_hub import login; login(token='${HF_TOKEN}')"
+
 WORKDIR /
 
 #RUN git clone https://github.com/comfyanonymous/ComfyUI.git && \
