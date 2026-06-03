@@ -5,6 +5,14 @@ FROM dese251/sviwan22:run AS runtime
 RUN pip install huggingface_hub
 RUN pip install runpod websocket-client
 
+ARG HF_TOKEN
+
+RUN HF_TOKEN=${HF_TOKEN} python3 -c "
+import os
+from huggingface_hub import login
+
+login(token=os.environ['HF_TOKEN'])
+"
 
 WORKDIR /
 
