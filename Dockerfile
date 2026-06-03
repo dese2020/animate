@@ -46,8 +46,8 @@ RUN cd /ComfyUI/custom_nodes && \
 
 #RUN pip install --upgrade onnxruntime-gpu==1.22
 
-RUN wget -q https://huggingface.co/Kijai/WanVideo_comfy/resolve/main/Wan2_1_VAE_bf16.safetensors -O /ComfyUI/models/vae/Wan2_1_VAE_bf16.safetensors
-RUN wget -q https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/clip_vision/clip_vision_h.safetensors -O /ComfyUI/models/clip_vision/clip_vision_h.safetensors
+#RUN wget -q https://huggingface.co/Kijai/WanVideo_comfy/resolve/main/Wan2_1_VAE_bf16.safetensors -O /ComfyUI/models/vae/Wan2_1_VAE_bf16.safetensors
+#RUN wget -q https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/clip_vision/clip_vision_h.safetensors -O /ComfyUI/models/clip_vision/clip_vision_h.safetensors
 #RUN wget -q https://huggingface.co/Kijai/WanVideo_comfy/resolve/main/umt5-xxl-enc-bf16.safetensors -O /ComfyUI/models/text_encoders/umt5-xxl-enc-bf16.safetensors
 #RUN wget -q https://huggingface.co/Kijai/WanVideo_comfy_fp8_scaled/resolve/main/Wan22Animate/Wan2_2-Animate-14B_fp8_e4m3fn_scaled_KJ.safetensors -O /ComfyUI/models/diffusion_models/Wan2_2-Animate-14B_fp8_e4m3fn_scaled_KJ.safetensors
 RUN python3 -c "from huggingface_hub import hf_hub_download; hf_hub_download(repo_id='Kijai/WanVideo_comfy', filename='umt5-xxl-enc-bf16.safetensors', local_dir='/ComfyUI/models/text_encoders/', local_dir_use_symlinks=False)"
@@ -56,17 +56,45 @@ RUN mv /ComfyUI/models/diffusion_models/Wan22Animate/Wan2_2-Animate-14B_fp8_e4m3
 #RUN python3 -c "from huggingface_hub import hf_hub_download; hf_hub_download(repo_id='Comfy-Org/Wan_2.2_ComfyUI_Repackaged', filename='split_files/diffusion_models/wan2.2_animate_14B_bf16.safetensors', local_dir='/ComfyUI/models/diffusion_models/', local_dir_use_symlinks=False)"
 #RUN mv /ComfyUI/models/diffusion_models/split_files/diffusion_models/wan2.2_animate_14B_bf16.safetensors /ComfyUI/models/diffusion_models/wan2.2_animate_14B_bf16.safetensors 
 
-RUN wget -q https://huggingface.co/eddy1111111/lightx2v_it2v_adaptive_fusionv_1.safetensors/resolve/main/lightx2v_elite_it2v_animate_face.safetensors -O /ComfyUI/models/loras/lightx2v_elite_it2v_animate_face.safetensors
-RUN wget -q https://huggingface.co/eddy1111111/lightx2v_it2v_adaptive_fusionv_1.safetensors/resolve/main/WAN22_MoCap_fullbodyCOPY_ED.safetensors -O /ComfyUI/models/loras/WAN22_MoCap_fullbodyCOPY_ED.safetensors
-RUN wget -q https://huggingface.co/eddy1111111/lightx2v_it2v_adaptive_fusionv_1.safetensors/resolve/main/FullDynamic_Ultimate_Fusion_Elite.safetensors -O /ComfyUI/models/loras/FullDynamic_Ultimate_Fusion_Elite.safetensors
-RUN wget -q https://huggingface.co/eddy1111111/lightx2v_it2v_adaptive_fusionv_1.safetensors/resolve/main/Wan2.2-Fun-A14B-InP-Fusion-Elite.safetensors -O /ComfyUI/models/loras/Wan2.2-Fun-A14B-InP-Fusion-Elite.safetensors 
-RUN wget -q https://huggingface.co/datasets/hijdese2020/wan22_datalora/resolve/main/allnsfw/wan22-k3nk4llinon3-15epoc-full-low-k3nk.safetensors -O /ComfyUI/models/loras/wan22-k3nk4llinon3-15epoc-full-low-k3nk.safetensors
+#RUN wget -q https://huggingface.co/eddy1111111/lightx2v_it2v_adaptive_fusionv_1.safetensors/resolve/main/lightx2v_elite_it2v_animate_face.safetensors -O /ComfyUI/models/loras/lightx2v_elite_it2v_animate_face.safetensors
+#RUN wget -q https://huggingface.co/eddy1111111/lightx2v_it2v_adaptive_fusionv_1.safetensors/resolve/main/WAN22_MoCap_fullbodyCOPY_ED.safetensors -O /ComfyUI/models/loras/WAN22_MoCap_fullbodyCOPY_ED.safetensors
+#RUN wget -q https://huggingface.co/eddy1111111/lightx2v_it2v_adaptive_fusionv_1.safetensors/resolve/main/FullDynamic_Ultimate_Fusion_Elite.safetensors -O /ComfyUI/models/loras/FullDynamic_Ultimate_Fusion_Elite.safetensors
+#RUN wget -q https://huggingface.co/eddy1111111/lightx2v_it2v_adaptive_fusionv_1.safetensors/resolve/main/Wan2.2-Fun-A14B-InP-Fusion-Elite.safetensors -O /ComfyUI/models/loras/Wan2.2-Fun-A14B-InP-Fusion-Elite.safetensors 
+#RUN wget -q https://huggingface.co/datasets/hijdese2020/wan22_datalora/resolve/main/allnsfw/wan22-k3nk4llinon3-15epoc-full-low-k3nk.safetensors -O /ComfyUI/models/loras/wan22-k3nk4llinon3-15epoc-full-low-k3nk.safetensors
 RUN mkdir -p /ComfyUI/models/detection
 
-RUN wget  https://huggingface.co/Wan-AI/Wan2.2-Animate-14B/resolve/main/process_checkpoint/det/yolov10m.onnx -O /ComfyUI/models/detection/yolov10m.onnx
-RUN wget  https://huggingface.co/Kijai/vitpose_comfy/resolve/main/onnx/vitpose_h_wholebody_model.onnx -O /ComfyUI/models/detection/vitpose_h_wholebody_model.onnx
-RUN wget  https://huggingface.co/Kijai/vitpose_comfy/resolve/main/onnx/vitpose_h_wholebody_data.bin -O /ComfyUI/models/detection/vitpose_h_wholebody_data.bin
+#RUN wget  https://huggingface.co/Wan-AI/Wan2.2-Animate-14B/resolve/main/process_checkpoint/det/yolov10m.onnx -O /ComfyUI/models/detection/yolov10m.onnx
+#RUN wget  https://huggingface.co/Kijai/vitpose_comfy/resolve/main/onnx/vitpose_h_wholebody_model.onnx -O /ComfyUI/models/detection/vitpose_h_wholebody_model.onnx
+#RUN wget  https://huggingface.co/Kijai/vitpose_comfy/resolve/main/onnx/vitpose_h_wholebody_data.bin -O /ComfyUI/models/detection/vitpose_h_wholebody_data.bin
 
+RUN python3 <<'PY'
+from huggingface_hub import hf_hub_download
+
+files = [
+    ("eddy1111111/lightx2v_it2v_adaptive_fusionv_1.safetensors", "lightx2v_elite_it2v_animate_face.safetensors", "/ComfyUI/models/loras/", None),
+    ("eddy1111111/lightx2v_it2v_adaptive_fusionv_1.safetensors", "WAN22_MoCap_fullbodyCOPY_ED.safetensors", "/ComfyUI/models/loras/", None),
+    ("eddy1111111/lightx2v_it2v_adaptive_fusionv_1.safetensors", "FullDynamic_Ultimate_Fusion_Elite.safetensors", "/ComfyUI/models/loras/", None),
+    ("eddy1111111/lightx2v_it2v_adaptive_fusionv_1.safetensors", "Wan2.2-Fun-A14B-InP-Fusion-Elite.safetensors", "/ComfyUI/models/loras/", None),
+    ("hijdese2020/wan22_datalora", "allnsfw/wan22-k3nk4llinon3-15epoc-full-low-k3nk.safetensors", "/ComfyUI/models/loras/", "dataset"),
+    ("Kijai/WanVideo_comfy", "Wan2_1_VAE_bf16.safetensors", "/ComfyUI/models/vae/", None),
+    ("Comfy-Org/Wan_2.1_ComfyUI_repackaged", "split_files/clip_vision/clip_vision_h.safetensors", "/ComfyUI/models/clip_vision/", None),
+    ("Wan-AI/Wan2.2-Animate-14B", "process_checkpoint/det/yolov10m.onnx", "/ComfyUI/models/detection/", None),
+    ("Kijai/vitpose_comfy", "onnx/vitpose_h_wholebody_model.onnx", "/ComfyUI/models/detection/", None),
+    ("Kijai/vitpose_comfy", "onnx/vitpose_h_wholebody_data.bin", "/ComfyUI/models/detection/", None),
+]
+
+for repo_id, filename, local_dir, repo_type in files:
+    kwargs = {
+        "repo_id": repo_id,
+        "filename": filename,
+        "local_dir": local_dir,
+        "local_dir_use_symlinks": False,
+    }
+    if repo_type:
+        kwargs["repo_type"] = repo_type
+
+    hf_hub_download(**kwargs)
+PY
 
 COPY . .
 RUN mkdir -p /ComfyUI/user/default/ComfyUI-Manager
