@@ -55,7 +55,12 @@ def queue_prompt(prompt):
     p = {"prompt": prompt, "client_id": client_id}
     data = json.dumps(p).encode('utf-8')
     req = urllib.request.Request(url, data=data)
-    return json.loads(urllib.request.urlopen(req).read())
+    try:
+        return json.loads(urllib.request.urlopen(req).read())
+    except urllib.error.HTTPError as e:
+        error_body = e.read().decode('utf-8')
+        logger.error(f"ComfyUI 400 error body: {error_body}")  # ← esto muestra el nodo exacto
+        raise
 
 def get_image(filename, subfolder, folder_type):
     url = f"http://{server_address}:8188/view"
@@ -272,13 +277,18 @@ def handler(job):
         prompt["151"]["inputs"]["value"] = job_input["height"]
         prompt["196"]["inputs"]["blocks_to_swap"] = job_input.get("blocks_to_swap",8)
         prompt["22"]["inputs"]["attention_mode"] = job_input.get("attention_mode", "flash_attn")
-        prompt["63"]["inputs"]["frame_load_cap"] = job_input["fps"] * job_input["max_seconds"]
+        prompt["63"]["inputs"]["frame_load_cap"] = int(job_input["fps"] * job_input["max_seconds"])
         
         frame_window_size = job_input.get("frame_window_size", 77)
         adaptive_window_mode = job_input.get("adaptive_window_mode", "adaptive")
         
         prompt["198"]["inputs"]["frame_window_size"] = frame_window_size
         prompt["198"]["inputs"]["adaptive_window_mode"] = adaptive_window_mode
+        prompt["22"]["inputs"]["compile_args"] = ["35", job_input.get("compile_args", 0)]  # 1 = activado
+        prompt["27"]["inputs"]["scheduler"] = job_input.get("scheduler", "dpm++_sde")
+        prompt["22"]["inputs"]["base_precision"] = job_input.get("precision", "bf16")
+        prompt["196"]["inputs"]["num_cuda_streams"] = job_input.get("cuda_streams", 8)
+        prompt["28"]["inputs"]["enable_vae_tiling"] = job_input.get("vae_tiling", False) # Para 720×1280 ponerlo en True
         
         # Animate embeds
         if "198" in prompt:
