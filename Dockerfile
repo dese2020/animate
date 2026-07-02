@@ -46,6 +46,15 @@ RUN cd /ComfyUI/custom_nodes && \
 
 #RUN pip install --upgrade onnxruntime-gpu==1.22
 
+# 1. Obliga a Hugging Face a usar una ruta con espacio para su caché
+ENV HF_HUB_CACHE=/ComfyUI/models/diffusion_models/.cache
+
+# 2. Obliga a Python (tempfile) a usar una ruta con espacio para los fragmentos temporales
+ENV TMPDIR=/ComfyUI/models/diffusion_models/.tmp
+
+# Crea los directorios antes para evitar problemas de permisos
+RUN mkdir -p /ComfyUI/models/diffusion_models/.cache /ComfyUI/models/diffusion_models/.tmp
+
 RUN wget -q https://huggingface.co/Kijai/WanVideo_comfy/resolve/main/Wan2_1_VAE_bf16.safetensors -O /ComfyUI/models/vae/Wan2_1_VAE_bf16.safetensors
 RUN wget -q https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/clip_vision/clip_vision_h.safetensors -O /ComfyUI/models/clip_vision/clip_vision_h.safetensors
 #RUN wget -q https://huggingface.co/Kijai/WanVideo_comfy/resolve/main/umt5-xxl-enc-bf16.safetensors -O /ComfyUI/models/text_encoders/umt5-xxl-enc-bf16.safetensors
@@ -100,6 +109,9 @@ for f in files:
     )
 
 EOF
+
+# Opcional: Limpia la caché temporal para que la imagen de Docker final no pese el doble
+RUN rm -rf /ComfyUI/models/diffusion_models/.cache /ComfyUI/models/diffusion_models/.tmp
 
 COPY . .
 RUN mkdir -p /ComfyUI/user/default/ComfyUI-Manager
