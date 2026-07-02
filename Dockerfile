@@ -64,9 +64,17 @@ RUN wget -q https://huggingface.co/Kijai/WanVideo_comfy/resolve/main/LoRAs/Wan22
 RUN wget -q https://huggingface.co/datasets/hijdese2020/wan22_datalora/resolve/main/allnsfw/wan22-k3nk4llinon3-15epoc-full-low-k3nk.safetensors -O /ComfyUI/models/loras/wan22-k3nk4llinon3-15epoc-full-low-k3nk.safetensors
 RUN mkdir -p /ComfyUI/models/detection
 
-RUN wget  https://huggingface.co/Wan-AI/Wan2.2-Animate-14B/resolve/main/process_checkpoint/det/yolov10m.onnx -O /ComfyUI/models/detection/yolov10m.onnx
-RUN wget  https://huggingface.co/Kijai/vitpose_comfy/resolve/main/onnx/vitpose_h_wholebody_model.onnx -O /ComfyUI/models/detection/vitpose_h_wholebody_model.onnx
-RUN wget  https://huggingface.co/Kijai/vitpose_comfy/resolve/main/onnx/vitpose_h_wholebody_data.bin -O /ComfyUI/models/detection/vitpose_h_wholebody_data.bin
+#RUN wget  https://huggingface.co/Wan-AI/Wan2.2-Animate-14B/resolve/main/process_checkpoint/det/yolov10m.onnx -O /ComfyUI/models/detection/yolov10m.onnx
+#RUN wget  https://huggingface.co/Kijai/vitpose_comfy/resolve/main/onnx/vitpose_h_wholebody_model.onnx -O /ComfyUI/models/detection/vitpose_h_wholebody_model.onnx
+#RUN wget  https://huggingface.co/Kijai/vitpose_comfy/resolve/main/onnx/vitpose_h_wholebody_data.bin -O /ComfyUI/models/detection/vitpose_h_wholebody_data.bin
+
+RUN python3 -c "from huggingface_hub import hf_hub_download; hf_hub_download(repo_id='Wan-AI/Wan2.2-Animate-14B', filename='process_checkpoint/det/yolov10m.onnx', local_dir='/ComfyUI/models/', local_dir_use_symlinks=False)"
+RUN mv /ComfyUI/models/process_checkpoint/det/yolov10m.onnx /ComfyUI/models/detection/yolov10m.onnx 
+RUN python3 -c "from huggingface_hub import hf_hub_download; hf_hub_download(repo_id='Kijai/vitpose_comfy', filename='onnx/vitpose_h_wholebody_model.onnx', local_dir='/ComfyUI/models/', local_dir_use_symlinks=False)"
+RUN mv /ComfyUI/models/onnx/vitpose_h_wholebody_model.onnx /ComfyUI/models/detection/vitpose_h_wholebody_model.onnx 
+RUN python3 -c "from huggingface_hub import hf_hub_download; hf_hub_download(repo_id='Kijai/vitpose_comfy', filename='onnx/vitpose_h_wholebody_data.bin', local_dir='/ComfyUI/models/', local_dir_use_symlinks=False)"
+RUN mv /ComfyUI/models/onnx/vitpose_h_wholebody_data.bin /ComfyUI/models/detection/vitpose_h_wholebody_data.bin 
+
 
 RUN python3 - <<'EOF'
 import os

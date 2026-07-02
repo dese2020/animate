@@ -1,7 +1,7 @@
 {
   "22": {
     "inputs": {
-      "model": "Wan2_2-Animate-14B_fp8_e4m3fn_scaled_KJ.safetensors",
+      "model": "wan2.2_animate_14B_bf16.safetensors",
       "base_precision": "bf16",
       "quantization": "disabled",
       "load_device": "offload_device",
