@@ -1,5 +1,5 @@
 # Use specific version of nvidia cuda image
-FROM dese251/sviwan22:run as runtime
+FROM dese251/sviwan22:run AS runtime
 
 #RUN pip install -U "huggingface_hub[hf_transfer]"
 RUN pip install huggingface_hub
