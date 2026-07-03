@@ -1,8 +1,9 @@
 # Use specific version of nvidia cuda image
 FROM dese251/sviwan22:run AS runtime
 
-# hf_transfer acelera muchísimo las descargas (evita el timeout de 30 min que tenías con wget)
-RUN pip install -U "huggingface_hub[hf_transfer]" runpod websocket-client
+# hf_xet ya viene incluido por defecto con huggingface_hub (reemplaza a hf_transfer,
+# que fue eliminado en huggingface_hub v1.0). Evita el timeout de 30 min que tenías con wget.
+RUN pip install -U huggingface_hub runpod websocket-client
 
 WORKDIR /
 
@@ -25,8 +26,8 @@ RUN cd /ComfyUI/custom_nodes && \
 RUN mkdir -p /ComfyUI/models/vae /ComfyUI/models/clip_vision /ComfyUI/models/text_encoders \
     /ComfyUI/models/diffusion_models /ComfyUI/models/loras /ComfyUI/models/detection
 
-# hf_transfer para velocidad
-ENV HF_HUB_ENABLE_HF_TRANSFER=1
+# Xet en modo alto rendimiento: satura ancho de banda y CPU disponibles para bajar mas rapido
+ENV HF_XET_HIGH_PERFORMANCE=1
 # Log mas limpio en build
 ENV HF_HUB_DISABLE_PROGRESS_BARS=1
 
