@@ -65,9 +65,6 @@ get("Kijai/WanVideo_comfy",
     "umt5-xxl-enc-bf16.safetensors",
     f"{M}/text_encoders/umt5-xxl-enc-bf16.safetensors")
 
-get("Comfy-Org/Wan_2.2_ComfyUI_Repackaged",
-    "split_files/diffusion_models/wan2.2_animate_14B_bf16.safetensors",
-    f"{M}/diffusion_models/wan2.2_animate_14B_bf16.safetensors")
 
 get("Kijai/WanVideo_comfy",
     "LoRAs/Wan22_relight/WanAnimate_relight_lora_fp16.safetensors",
@@ -98,6 +95,31 @@ for f in [
     "Wan2.2-Fun-A14B-InP-Fusion-Elite.safetensors",
 ]:
     get(repo_id, f, f"{M}/loras/{f}")
+
+EOF
+
+RUN python3 - <<'EOF'
+import os, shutil
+from huggingface_hub import hf_hub_download
+
+CACHE = "/tmp/hf_cache"
+M = "/ComfyUI/models"
+
+def get(repo_id, filename, dest_path, repo_type="model"):
+    os.makedirs(os.path.dirname(dest_path), exist_ok=True)
+    # Solo cache_dir (NO local_dir) -> nunca se duplica el archivo
+    path = hf_hub_download(repo_id=repo_id, filename=filename,
+                            repo_type=repo_type, cache_dir=CACHE)
+    real = os.path.realpath(path)     # el blob real, no el symlink
+    shutil.move(real, dest_path)      # mv = instantaneo, no copia
+    shutil.rmtree(CACHE, ignore_errors=True)  # borra restos (symlinks/snapshots)
+    print("OK ->", dest_path, flush=True)
+
+
+get("Comfy-Org/Wan_2.2_ComfyUI_Repackaged",
+    "split_files/diffusion_models/wan2.2_animate_14B_bf16.safetensors",
+    f"{M}/diffusion_models/wan2.2_animate_14B_bf16.safetensors")
+
 
 EOF
 
